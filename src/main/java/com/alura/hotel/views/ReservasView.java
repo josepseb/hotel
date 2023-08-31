@@ -341,7 +341,7 @@ public class ReservasView extends JFrame {
 					txtFormaPago.getSelectedItem().toString());
 			reservaController.guardar(reserva);
 
-			RegistroHuesped registro = new RegistroHuesped();
+			RegistroHuesped registro = new RegistroHuesped(reserva.getId());
 			registro.setVisible(true);
 			dispose();
 
