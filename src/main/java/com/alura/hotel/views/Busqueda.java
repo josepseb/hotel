@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.alura.hotel.controller.HuespedesController;
+import com.alura.hotel.controller.ReservaController;
+import com.alura.hotel.modelo.Reserva;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -38,6 +43,13 @@ public class Busqueda extends JFrame {
 	private JLabel labelAtras;
 	private JLabel labelExit;
 	int xMouse, yMouse;
+	
+	private ReservaController reservaController;
+	private HuespedesController huespedesController;
+	private ReservasView reservasView;
+	String reserva;
+	String huespedes;
+	
 
 	/**
 	 * Launch the application.
@@ -59,6 +71,11 @@ public class Busqueda extends JFrame {
 	 * Create the frame.
 	 */
 	public Busqueda() {
+		
+		this.reservasView = new ReservasView();
+		this.reservaController = new ReservaController();
+		this.huespedesController = new HuespedesController();
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/com/alura/hotel/imagenes/lupa2.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 571);
@@ -101,6 +118,7 @@ public class Busqueda extends JFrame {
 		modelo.addColumn("Fecha Check Out");
 		modelo.addColumn("Valor");
 		modelo.addColumn("Forma de Pago");
+		mostrarTablaReservas();
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/com/alura/hotel/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
@@ -260,6 +278,29 @@ public class Busqueda extends JFrame {
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
 		setResizable(false);
+	}
+	
+	private List<Reserva> mostrarReservas(){
+		return this.reservaController.mostrar();
+	}
+	
+	private void mostrarTablaReservas() {
+		List<Reserva> reservasMostrar = mostrarReservas();
+		modelo.setRowCount(0);
+		
+		try {
+			for(Reserva reservas:reservasMostrar) {
+				modelo.addRow(new Object[] {
+						reservas.getId(),
+						reservas.getFechaEntrada(),
+						reservas.getFechaSalida(),
+						reservas.getValor(),
+						reservas.getFormaPago()
+				});
+			}
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 //Código que permite mover la ventana por la pantalla según la posición de "x" y "y"

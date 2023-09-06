@@ -9,10 +9,16 @@ public class Reserva {
 	private LocalDate fechaSalida;
 	private String valor;
 	private String formaPago;
-	
-	
 
-	public Reserva(LocalDate fechaEntrada, LocalDate fechaSalida, String valor, String formaPago) {		
+	public Reserva(LocalDate fechaEntrada, LocalDate fechaSalida, String valor, String formaPago) {
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.valor = valor;
+		this.formaPago = formaPago;
+	}
+
+	public Reserva(Integer id, LocalDate fechaEntrada, LocalDate fechaSalida, String valor, String formaPago) {
+		this.id = id;
 		this.fechaEntrada = fechaEntrada;
 		this.fechaSalida = fechaSalida;
 		this.valor = valor;
