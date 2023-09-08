@@ -360,7 +360,7 @@ public class ReservasView extends JFrame {
 			
 			Calendar inicio = fechaEntrada.getCalendar();
 			Calendar fin = fechaSalida.getCalendar();
-			int dias = -1; // Cuenta desde el dia siguiente
+			int dias = 0; // Cuenta desde el dia siguiente
 			int noche = 50; // Valor nocturno
 			int valor;
 
@@ -374,7 +374,11 @@ public class ReservasView extends JFrame {
 
 		}
 	}
-
+		
+	public void limpiarValor() {
+		txtValor.setText("");
+	}
+	
 	// Código que permite mover la ventana por la pantalla según la posición de "x"
 	// y "y"
 	private void headerMousePressed(java.awt.event.MouseEvent evt) {

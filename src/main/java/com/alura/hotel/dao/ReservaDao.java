@@ -69,8 +69,8 @@ public class ReservaDao {
 				try (resultSet) {
 					while (resultSet.next()) {
 						int id = resultSet.getInt("id");
-						LocalDate fechaEntrada = resultSet.getDate("fecha_entrada").toLocalDate().plusDays(1);
-						LocalDate fechaSalida = resultSet.getDate("fecha_salida").toLocalDate().plusDays(1);
+						LocalDate fechaEntrada = resultSet.getDate("fecha_entrada").toLocalDate().plusDays(0);
+						LocalDate fechaSalida = resultSet.getDate("fecha_salida").toLocalDate().plusDays(0);
 						String valor = resultSet.getString("valor");
 						String formaPago = resultSet.getString("forma_de_pago");
 
@@ -88,6 +88,7 @@ public class ReservaDao {
 	}
 	
 	public List<Reserva> buscarId(String id) {
+
 
 		List<Reserva> reservas = new ArrayList<Reserva>();
 
@@ -122,4 +123,25 @@ public class ReservaDao {
 		return reservas;
 	}
 
+	public void actualizar(Integer id, LocalDate fechaEntrada, LocalDate fechaSalida, String valor, String formaPago) {
+		try {
+			final PreparedStatement statement = con
+					.prepareStatement("UPDATE reservas SET fecha_entrada=?, fecha_salida=?, valor=?, forma_de_pago=? WHERE id = ? ");
+			
+			try(statement){
+				
+				statement.setObject(1, java.sql.Date.valueOf(fechaEntrada));
+				statement.setObject(2, java.sql.Date.valueOf(fechaSalida));
+				statement.setString(3, valor);
+				statement.setString(4, formaPago);
+				statement.setInt(5, id);
+				
+				statement.execute();
+				System.out.println("Esta en base de datos");
+			}
+			
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

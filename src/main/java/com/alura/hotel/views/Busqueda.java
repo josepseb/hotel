@@ -18,9 +18,12 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import java.awt.Toolkit;
@@ -30,6 +33,10 @@ import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @SuppressWarnings("serial")
 public class Busqueda extends JFrame {
@@ -258,6 +265,17 @@ public class Busqueda extends JFrame {
 		lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		
 		JPanel btnEditar = new JPanel();
+		btnEditar.addMouseListener(new MouseAdapter() {
+			
+			public void mouseClicked(MouseEvent d) {
+				int filaReservas = tbReservas.getSelectedRow();
+				if(filaReservas>=0) {
+					actualizarReservas();
+					limpiarTabla();
+					mostrarTablaReservas();
+				}
+			}
+		});
 		btnEditar.setLayout(null);
 		btnEditar.setBackground(new Color(12, 138, 199));
 		btnEditar.setBounds(635, 508, 122, 35);
@@ -332,6 +350,50 @@ public class Busqueda extends JFrame {
 		}
 	}
 	
+	private void actualizarReservas() {
+		Optional.ofNullable(modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn()))
+		.ifPresent(fila->{
+			LocalDate fechaEntrada;
+			LocalDate fechaSalida;
+			
+			try {
+				DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				fechaEntrada = LocalDate.parse(modelo.getValueAt(tbReservas.getSelectedRow(), 1).toString(),dateFormatter);
+				fechaSalida = LocalDate.parse(modelo.getValueAt(tbReservas.getSelectedRow(), 2).toString(),dateFormatter);
+				
+			}catch (DateTimeException e) {
+				throw new RuntimeException(e);
+			}
+			this.reservasView.limpiarValor();
+			
+			String valor = "S/" + calcularValorReserva(fechaEntrada,fechaSalida);
+			String formaPago = (String)modelo.getValueAt(tbReservas.getSelectedRow(), 4);
+			Integer id = Integer.valueOf(modelo.getValueAt(tbReservas.getSelectedRow(), 0).toString());
+			
+			//Para no cambiar el id
+			if(tbReservas.getSelectedColumn()==0) {
+				JOptionPane.showMessageDialog(this, "No se puede editar los ID");				
+			}else {
+				this.reservaController.actualizarReserva(id, fechaEntrada, fechaSalida, valor, formaPago);
+				JOptionPane.showMessageDialog(this,"Registro modificado con exito");
+			}
+		});
+	}
+	
+	
+	private String calcularValorReserva(LocalDate fechaEntrada, LocalDate fechaSalida) {
+		
+		if(fechaEntrada != null && fechaSalida !=null) {
+			int dias = (int) ChronoUnit.DAYS.between(fechaEntrada, fechaSalida);
+			int noche = 50;
+			int valor = dias * noche;
+			return Integer.toString(valor);
+		}else {
+			return null;
+		}
+		
+	}
+
 	private void limpiarTabla() {
 		((DefaultTableModel)tbHuespedes.getModel()).setRowCount(0);
 		((DefaultTableModel)tbReservas.getModel()).setRowCount(0);

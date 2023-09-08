@@ -1,5 +1,6 @@
 package com.alura.hotel.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.alura.hotel.dao.ReservaDao;
@@ -21,13 +22,17 @@ public class ReservaController {
 	public void guardar(Reserva reserva) {
 		this.reservaDao.guardar(reserva);
 	}
-	
-	public List<Reserva> mostrar(){
+
+	public List<Reserva> mostrar() {
 		return this.reservaDao.mostrar();
 	}
-	
-	public List<Reserva> buscar(String id){
+
+	public List<Reserva> buscar(String id) {
 		return this.reservaDao.buscarId(id);
 	}
 
+	public void actualizarReserva(Integer id, LocalDate fechaEntrada, LocalDate fechaSalida, String valor,
+			String formaPago) {
+		this.reservaDao.actualizar(id, fechaEntrada, fechaSalida, valor, formaPago);
+	}
 }
