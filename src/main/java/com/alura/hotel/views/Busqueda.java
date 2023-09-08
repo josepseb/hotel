@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.alura.hotel.controller.HuespedesController;
 import com.alura.hotel.controller.ReservaController;
+import com.alura.hotel.modelo.Huespedes;
 import com.alura.hotel.modelo.Reserva;
 
 import javax.swing.JTable;
@@ -125,6 +126,7 @@ public class Busqueda extends JFrame {
 		modelo.addColumn("Fecha Check Out");
 		modelo.addColumn("Valor");
 		modelo.addColumn("Forma de Pago");
+		tbReservas.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		mostrarTablaReservas();
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/com/alura/hotel/imagenes/reservado.png")), scroll_table, null);
@@ -142,6 +144,7 @@ public class Busqueda extends JFrame {
 		modeloHuesped.addColumn("Nacionalidad");
 		modeloHuesped.addColumn("Telefono");
 		modeloHuesped.addColumn("Número de Reserva");
+		mostrarTablaHuespedes();
 		JScrollPane scroll_tableHuespedes = new JScrollPane(tbHuespedes);
 		panel.addTab("Huéspedes", new ImageIcon(Busqueda.class.getResource("/com/alura/hotel/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
@@ -245,8 +248,10 @@ public class Busqueda extends JFrame {
 				
 				if(txtBuscar.getText().equals("")) {
 					mostrarTablaReservas();
+					mostrarTablaHuespedes();
 				}else {
 					mostrarTablaReservasId();
+					mostrarTablaHuespedesId();
 				}
 				
 			}
@@ -306,6 +311,7 @@ public class Busqueda extends JFrame {
 						JOptionPane.showMessageDialog(contentPane, "Registro eliminado con exito!");
 						limpiarTabla();
 						mostrarTablaReservas();
+						mostrarHuespedes();  	 	
 					}
 					
 				}
@@ -329,6 +335,8 @@ public class Busqueda extends JFrame {
 		setResizable(false);
 	}
 	
+	//operaciones con reservas
+	
 	private List<Reserva> mostrarReservas(){
 		return this.reservaController.mostrar();
 	}
@@ -336,8 +344,9 @@ public class Busqueda extends JFrame {
 	private List<Reserva> buscarIdReserva(){
 		return this.reservaController.buscar(txtBuscar.getText());
 	}
-	
+
 	private void mostrarTablaReservas() {
+		
 		List<Reserva> reserva = mostrarReservas();
 		modelo.setRowCount(0);
 		
@@ -418,6 +427,67 @@ public class Busqueda extends JFrame {
 		
 	}
 
+	//operaciones con huespedes
+	
+	private List<Huespedes> mostrarHuespedes(){
+		return this.huespedesController.mostrarHuespedes();
+	}
+
+	private List<Huespedes> buscarHuespedesId(){
+		return this.huespedesController.buscarHuesped(txtBuscar.getText());
+	}
+
+	private void mostrarTablaHuespedes() {
+		
+		List<Huespedes> huespedes = mostrarHuespedes();
+		modeloHuesped.setRowCount(0);
+		
+		try {
+			for(Huespedes huespedes1:huespedes) {
+				modeloHuesped.addRow(new Object[] {
+						
+						huespedes1.getId(),
+						huespedes1.getNombre(),
+						huespedes1.getApellido(),
+						huespedes1.getFechaNacimiento(),
+						huespedes1.getNacionalidad(),
+						huespedes1.getTelefono(),
+						huespedes1.getIdReserva()						
+				
+				});
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
+
+	private void mostrarTablaHuespedesId() {
+		
+		List<Huespedes> huespedes = buscarHuespedesId();
+		modeloHuesped.setRowCount(0);
+		
+		try {
+			for(Huespedes huespedes1:huespedes) {
+				modeloHuesped.addRow(new Object[] {
+						
+						huespedes1.getId(),
+						huespedes1.getNombre(),
+						huespedes1.getApellido(),
+						huespedes1.getFechaNacimiento(),
+						huespedes1.getNacionalidad(),
+						huespedes1.getTelefono(),
+						huespedes1.getIdReserva()						
+				
+				});
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
+
+	
 	private void limpiarTabla() {
 		((DefaultTableModel)tbHuespedes.getModel()).setRowCount(0);
 		((DefaultTableModel)tbReservas.getModel()).setRowCount(0);

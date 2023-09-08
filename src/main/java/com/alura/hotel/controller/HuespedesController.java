@@ -1,5 +1,7 @@
 package com.alura.hotel.controller;
 
+import java.util.List;
+
 import com.alura.hotel.dao.HuespedesDao;
 import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.modelo.Huespedes;
@@ -15,7 +17,14 @@ public class HuespedesController {
 
 	public void guardar(Huespedes huespedes) {
 		this.huespedesDao.guardar(huespedes);
-
+	}
+	
+	public List<Huespedes> mostrarHuespedes() {
+		return this.huespedesDao.mostrar();
+	}
+	
+	public List<Huespedes> buscarHuesped(String id) {
+		return this.huespedesDao.buscarId(id);
 	}
 
 }

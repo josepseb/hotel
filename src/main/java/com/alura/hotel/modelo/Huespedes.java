@@ -4,6 +4,14 @@ import java.time.LocalDate;
 
 public class Huespedes {
 	
+	private Integer id;
+	private String nombre;
+	private String apellido;
+	private LocalDate fechaNacimiento;
+	private String nacionalidad;
+	private String telefono;
+	private Integer idReserva;
+	
 	public Huespedes(String nombre, String apellido, LocalDate fechaNacimiento, String nacionalidad, String telefono,
 			Integer idReserva) {
 
@@ -15,6 +23,18 @@ public class Huespedes {
 		this.idReserva = idReserva;
 	}
 	
+	public Huespedes(int id2, String nombre2, String apellido2, LocalDate fechaNacimiento2, String nacionalidad2,
+			String telefono2, int idReserva2) {
+		
+		this.id = id2;
+		this.nombre = nombre2;
+		this.apellido = apellido2;
+		this.fechaNacimiento = fechaNacimiento2;
+		this.nacionalidad = nacionalidad2;
+		this.telefono = telefono2;
+		this.idReserva = idReserva2;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -69,17 +89,6 @@ public class Huespedes {
 
 	public void setIdReserva(Integer idReserva) {
 		this.idReserva = idReserva;
-	}
-
-	private Integer id;
-	private String nombre;
-	private String apellido;
-	private LocalDate fechaNacimiento;
-	private String nacionalidad;
-	private String telefono;
-	private Integer idReserva;
-	
-
-	
+	}	
 
 }
