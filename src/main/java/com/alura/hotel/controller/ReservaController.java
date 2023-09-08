@@ -35,4 +35,9 @@ public class ReservaController {
 			String formaPago) {
 		this.reservaDao.actualizar(id, fechaEntrada, fechaSalida, valor, formaPago);
 	}
+	
+	public void eliminar(Integer id) {
+		this.reservaDao.eliminar(id);
+	}
+	
 }

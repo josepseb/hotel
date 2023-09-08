@@ -144,4 +144,35 @@ public class ReservaDao {
 			throw new RuntimeException(e);
 		}
 	}
+
+	public void eliminar(Integer id) {
+		try {
+			
+			Statement statement = con.createStatement();
+			
+			try(statement){
+				statement.execute("SET FOREIGN_KEY_CHECKS = 0");
+			}
+			
+            final PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM reservas WHERE id = ?");
+            
+            try(preparedStatement){
+            	
+            	
+            	preparedStatement.setInt(1, id);
+            	preparedStatement.execute();
+            }
+            
+            Statement statement2 = con.createStatement();
+            
+			try(statement2){
+				
+				statement2.execute("SET FOREIGN_KEY_CHECKS = 1");
+			}
+            
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
