@@ -1,5 +1,6 @@
 package com.alura.hotel.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.alura.hotel.dao.HuespedesDao;
@@ -25,6 +26,18 @@ public class HuespedesController {
 	
 	public List<Huespedes> buscarHuesped(String id) {
 		return this.huespedesDao.buscarId(id);
+	}
+	
+	public void actualizar(Integer id, String nombre, String apellido, LocalDate fechaNacimiento,
+			String nacionalidad, String telefono, Integer idReserva) {
+		
+		this.huespedesDao.actualizarHuesped(
+				id, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);		
+		
+	}
+	
+	public void eliminar(Integer id) {
+		this.huespedesDao.eliminar(id);
 	}
 
 }

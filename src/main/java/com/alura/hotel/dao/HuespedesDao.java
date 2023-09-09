@@ -13,6 +13,7 @@ import com.alura.hotel.modelo.Huespedes;
 import com.alura.hotel.modelo.Reserva;
 
 public class HuespedesDao {
+
 	private Connection con;
 
 	public HuespedesDao(Connection con) {
@@ -26,7 +27,7 @@ public class HuespedesDao {
 
 					"INSERT INTO huespedes (nombre, apellido, "
 							+ "fecha_nacimiento, nacionalidad, telefono, id_reserva) VALUES (?,?,?,?,?,?)",
-							Statement.RETURN_GENERATED_KEYS
+					Statement.RETURN_GENERATED_KEYS
 
 			);
 
@@ -81,8 +82,9 @@ public class HuespedesDao {
 						String nacionalidad = resultSet.getString("nacionalidad");
 						String telefono = resultSet.getString("telefono");
 						int idReserva = resultSet.getInt("id_reserva");
-						
-						Huespedes huesped = new Huespedes(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
+
+						Huespedes huesped = new Huespedes(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono,
+								idReserva);
 						huespedes.add(huesped);
 					}
 				}
@@ -106,10 +108,10 @@ public class HuespedesDao {
 							+ "telefono, id_reserva FROM huespedes WHERE id = ? ");
 
 			try (statement) {
-				
+
 				statement.setString(1, id);
 				statement.execute();
-				
+
 				final ResultSet resultSet = statement.getResultSet();
 
 				try (resultSet) {
@@ -121,8 +123,9 @@ public class HuespedesDao {
 						String nacionalidad = resultSet.getString("nacionalidad");
 						String telefono = resultSet.getString("telefono");
 						int idReserva = resultSet.getInt("id_reserva");
-						
-						Huespedes huesped = new Huespedes(id1, nombre, apellido, fechaNacimiento, nacionalidad, telefono, idReserva);
+
+						Huespedes huesped = new Huespedes(id1, nombre, apellido, fechaNacimiento, nacionalidad,
+								telefono, idReserva);
 						huespedes.add(huesped);
 					}
 				}
@@ -133,6 +136,62 @@ public class HuespedesDao {
 			throw new RuntimeException(e);
 		}
 		return huespedes;
+	}
+
+	public void actualizarHuesped(Integer id, String nombre, String apellido, LocalDate fechaNacimiento,
+			String nacionalidad, String telefono, Integer idReserva) {
+
+		try {
+			final PreparedStatement statement = con.prepareStatement("UPDATE huespedes SET nombre=?, apellido=?,"
+					+ "fecha_nacimiento=?, nacionalidad=?, telefono=?, id_reserva=? WHERE id = ? ");
+
+			try (statement) {
+				statement.setString(1, nombre);
+				statement.setString(2, apellido);
+				statement.setObject(3, fechaNacimiento);
+				statement.setString(4, nacionalidad);
+				statement.setString(5, telefono);
+				statement.setInt(6, idReserva);
+				statement.setInt(7, id);
+
+				statement.execute();
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public void eliminar(Integer id) {
+		try {
+
+			Statement statement = con.createStatement();
+
+//			try (statement) {
+//				statement.execute("SET FOREIGN_KEY_CHECKS = 0");
+//			}
+
+			final PreparedStatement preparedStatement = con.prepareStatement(
+					"DELETE FROM huespedes WHERE id = ?"
+					);
+
+			try (preparedStatement) {
+
+				preparedStatement.setInt(1, id);
+				preparedStatement.execute();
+			}
+
+//			Statement statement2 = con.createStatement();
+//
+//			try (statement2) {
+//
+//				statement2.execute("SET FOREIGN_KEY_CHECKS = 1");
+//			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
